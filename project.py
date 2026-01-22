@@ -98,7 +98,7 @@ def retriver():
     )
 
     model = ChatGoogleGenerativeAI(model='gemini-1.5-pro', temperature=0)
-    retriever=vectorstore.as_retriever(search_kwargs={"k":8,"fetch_k": 20},
+    retriever=vectorstore.as_retriever(search_kwargs={"k":5,"fetch_k": 10},
      search_type="mmr")
     
     prompt = ChatPromptTemplate.from_messages([
