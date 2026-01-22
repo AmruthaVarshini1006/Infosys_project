@@ -6,7 +6,7 @@ from project import load_Documents,embeddingmodel, retriver
 
 
 st.set_page_config(page_title="Chatbot")
-st.title("AI-Based Document Search & Knowledge Retrieval")
+st.title("AI-Powered Document Search & Knowledge Retrieval System")
 st.subheader("Upload documents")
 model = ChatGoogleGenerativeAI(model='gemini-2.5-flash', temperature=0)
 

@@ -31,3 +31,11 @@ torch
 torchvision
 torchaudio
 
+#other needed packages 
+streamlit
+langchain
+langchain-community
+langchain-core
+pypdf
+
+
