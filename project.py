@@ -78,7 +78,7 @@ def embeddingmodel(File_path):
                 pass
             gc.collect()
             time.sleep(1)
-            shutil.rmtree(persistent_directory, ignore_errors=True)
+            shutil.rmtree(persistent_director, ignore_errors=True)
         st.session_state.db_deleted = True
 
     documments=load_Documents(File_path)
@@ -88,8 +88,6 @@ def embeddingmodel(File_path):
     db=Chroma.from_documents(
     documents=chunk,
     embedding=embeddings,
-    persist_directory=persistent_directory,
-    collection_name=COLLECTION_NAME,
     collection_metadata={"hnsw:space":"cosine"}
     )
     st.session_state["chroma_db"] = db
@@ -100,8 +98,6 @@ def retriver():
     embeddings= GoogleGenerativeAIEmbeddings(model= 'gemini-embedding-001', dimension = 32)
 
     vectorstore = Chroma(
-        persist_directory=persistent_directory,
-        collection_name=COLLECTION_NAME,
         embedding_function=embeddings
     )
 
