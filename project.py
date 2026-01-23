@@ -17,7 +17,7 @@ from langchain_core.runnables import RunnableLambda
 load_dotenv()
 persistent_directory="db/chroma_db"
 COLLECTION_NAME = "my_collection"
-model = ChatGoogleGenerativeAI(model='gemini-1.5-pro', temperature=0)
+model = ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
 
 
 def load_Documents(File_path):
@@ -97,7 +97,7 @@ def retriver():
         embedding_function=embeddings
     )
 
-    model = ChatGoogleGenerativeAI(model='gemini-1.5-pro', temperature=0)
+    model = ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
     retriever=vectorstore.as_retriever(search_kwargs={"k":5,"fetch_k": 10},
      search_type="mmr")
     
