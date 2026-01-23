@@ -8,7 +8,7 @@ from project import load_Documents,embeddingmodel, retriver
 st.set_page_config(page_title="Chatbot")
 st.title("AI-Powered Document Search & Knowledge Retrieval System")
 st.subheader("Upload documents")
-model = ChatGoogleGenerativeAI(model='gemini-1.5-pro', temperature=0)
+model = ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
 
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
