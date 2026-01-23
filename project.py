@@ -12,12 +12,20 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableLambda
 
+def normalize_input(x):
 
+    if isinstance(x, dict):
+        if "question" in x:
+            return x["question"]
+        return str(x)
+    if isinstance(x, list):
+        return "\n".join(m.content for m in x if hasattr(m, "content"))
+    return str(x)
 
 load_dotenv()
 persistent_directory="db/chroma_db"
 COLLECTION_NAME = "my_collection"
-model = ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
+model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
 
 
 def load_Documents(File_path):
@@ -97,7 +105,7 @@ def retriver():
         embedding_function=embeddings
     )
 
-    model = ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
+    model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
     retriever=vectorstore.as_retriever(search_kwargs={"k":5,"fetch_k": 10},
      search_type="mmr")
     
