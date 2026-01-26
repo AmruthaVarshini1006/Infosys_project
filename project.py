@@ -88,7 +88,6 @@ def embeddingmodel(File_path):
     db=Chroma.from_documents(
     documents=chunk,
     embedding=embeddings,
-    collection=COLLECTION_NAME,
     collection_metadata={"hnsw:space":"cosine"}
     )
     return db
