@@ -23,7 +23,7 @@ def normalize_input(x):
     return str(x)
 
 load_dotenv()
-persistent_directory="db/chroma_db"
+#persistent_directory="db/chroma_db"
 COLLECTION_NAME = "my_collection"
 model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
 
@@ -88,18 +88,15 @@ def embeddingmodel(File_path):
     db=Chroma.from_documents(
     documents=chunk,
     embedding=embeddings,
+    collection=COLLECTION_NAME,
     collection_metadata={"hnsw:space":"cosine"}
     )
-    st.session_state["chroma_db"] = db
+    return db
 
     
-def retriver(): 
+def retriver(vectorestore): 
 
     embeddings= GoogleGenerativeAIEmbeddings(model= 'gemini-embedding-001', dimension = 32)
-
-    vectorstore = Chroma(
-        embedding_function=embeddings
-    )
 
     model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
     retriever=vectorstore.as_retriever(search_kwargs={"k":5,"fetch_k": 10},
