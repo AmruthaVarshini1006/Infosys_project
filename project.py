@@ -93,7 +93,7 @@ def embeddingmodel(File_path):
     return db
 
     
-def retriver(vectorestore): 
+def retriver(vectorstore): 
 
     retriever=vectorstore.as_retriever(search_kwargs={"k":5,"fetch_k": 10},
      search_type="mmr")
