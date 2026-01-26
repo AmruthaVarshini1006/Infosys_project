@@ -9,6 +9,8 @@ from langchain_core.runnables import RunnableLambda
 st.set_page_config(page_title="Chatbot")
 st.title("AI-Powered Document Search & Knowledge Retrieval System")
 st.subheader("Upload documents")
+def build_vectorstore(file_paths):
+    return embeddingmodel(file_paths)
 model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
 
 UPLOAD_DIR = "uploads"
@@ -27,6 +29,8 @@ uploaded_files = st.file_uploader(
     accept_multiple_files=True
 )
 
+
+
 if uploaded_files:
     st.session_state.file_paths = [] 
     for file in uploaded_files:
@@ -40,9 +44,11 @@ if st.button("Load documents"):
     if not docs:
         st.warning("Please upload your documents ")
         st.stop()
-    embeddingmodel(st.session_state.file_paths)
+    
+    db = build_vectorstore(st.session_state.file_paths)
     st.session_state.chat_history = []
     st.session_state.chain = retriver()
+    st.session_state.chain = retriver(db)
     st.success("Document loaded. Ask your question below...")
 
 if "chat_history" not in st.session_state:
