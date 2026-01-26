@@ -95,9 +95,6 @@ def embeddingmodel(File_path):
     
 def retriver(vectorestore): 
 
-    embeddings= GoogleGenerativeAIEmbeddings(model= 'gemini-embedding-001', dimension = 32)
-
-    model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
     retriever=vectorstore.as_retriever(search_kwargs={"k":5,"fetch_k": 10},
      search_type="mmr")
     
