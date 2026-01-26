@@ -47,7 +47,6 @@ if st.button("Load documents"):
     
     db = build_vectorstore(st.session_state.file_paths)
     st.session_state.chat_history = []
-    st.session_state.chain = retriver()
     st.session_state.chain = retriver(db)
     st.success("Document loaded. Ask your question below...")
 
