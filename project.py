@@ -23,7 +23,7 @@ def normalize_input(x):
     return str(x)
 
 load_dotenv()
-#persistent_directory="db/chroma_db"
+persistent_directory="db/chroma_db"
 COLLECTION_NAME = "my_collection"
 model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
 
