@@ -2,7 +2,7 @@ import os
 import streamlit as st
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import AIMessage, HumanMessage
-from project import load_Documents,embeddingmodel, retriver, normalize_input
+from project import load_Documents,embeddingmodel, retriver, normalize_input, call_llm
 from langchain_core.runnables import RunnableLambda
 from langchain_groq import ChatGroq
 
