@@ -20,37 +20,24 @@ def normalize_input(x):
         if not q or str(q).strip()=="":
             return "Answer using the given context."
         return q
-        #if "question" in x:
-            #return x["question"]
-        #return str(x)
     if isinstance(x, list):
         return "\n".join(m.content for m in x if hasattr(m, "content"))
     return str(x)
+    
 
 load_dotenv()
 persistent_directory="db/chroma_db"
 COLLECTION_NAME = "my_collection"
-gemini_llm = ChatGoogleGenerativeAI(
-    model="models/gemini-2.0-flash",
-    temperature=0,
-    google_api_key=st.secrets["GOOGLE_API_KEY"]
-)
+gemini_llm = ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0, google_api_key=st.secrets["GOOGLE_API_KEY"])
+groq_llm = ChatGroq(model="llama-3.3-70b-versatile",temperature=0, api_key=st.secrets["GROQ_API_KEY"])
 
-groq_llm = ChatGroq(
-    model="llama-3.3-70b-versatile",
-    temperature=0,
-    api_key=st.secrets["GROQ_API_KEY"]
-)
 def call_llm(x):
     try:
         res= gemini_llm.invoke(x)
     except Exception:
         res=groq_llm.invoke(x)
-    return res.content
-        
-
+    return res.content        
 model = RunnableLambda(normalize_input) | RunnableLambda(call_llm)
-#model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
 
 
 def load_Documents(File_path):
@@ -71,15 +58,13 @@ def load_Documents(File_path):
             loader = TextLoader(path, encoding="utf-8")
         else:
             continue 
-
-
         documents.extend(loader.load())
 
     if len(documents) == 0:
         print(f"No files found .Please add your documents")
     
     return documents
-
+    
 
 def spliting(documents):
     splitter= RecursiveCharacterTextSplitter(
@@ -89,9 +74,7 @@ def spliting(documents):
     chunks=splitter.split_documents(documents)
 
     return chunks
-
     
-
 
 def embeddingmodel(File_path):
 
@@ -119,7 +102,7 @@ def embeddingmodel(File_path):
 
     
 def retriver(vectorstore): 
-
+    
     retriever=vectorstore.as_retriever(search_kwargs={"k":5,"fetch_k": 10},
      search_type="mmr")
     
