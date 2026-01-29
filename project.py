@@ -8,6 +8,7 @@ from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableLambda
@@ -25,7 +26,25 @@ def normalize_input(x):
 load_dotenv()
 persistent_directory="db/chroma_db"
 COLLECTION_NAME = "my_collection"
-model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
+gemini_llm = ChatGoogleGenerativeAI(
+    model="models/gemini-2.0-flash",
+    temperature=0,
+    google_api_key=st.secrets["GOOGLE_API_KEY"]
+)
+
+groq_llm = ChatGroq(
+    model="llama3-70b-8192",
+    temperature=0,
+    api_key=st.secrets["GROQ_API_KEY"]
+)
+def call_llm(x):
+    try:
+        return gemini_llm.invoke(x)
+    except Exception:
+        return groq_llm.invoke(x)
+
+model = RunnableLambda(normalize_input) | RunnableLambda(call_llm)
+#model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
 
 
 def load_Documents(File_path):
