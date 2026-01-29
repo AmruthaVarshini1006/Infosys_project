@@ -16,9 +16,13 @@ from langchain_core.runnables import RunnableLambda
 def normalize_input(x):
 
     if isinstance(x, dict):
-        if "question" in x:
-            return x["question"]
-        return str(x)
+        q=x.get("question", "")
+        if not q or str(q).strip()=="":
+            return "Answer using the given context."
+        return q
+        #if "question" in x:
+            #return x["question"]
+        #return str(x)
     if isinstance(x, list):
         return "\n".join(m.content for m in x if hasattr(m, "content"))
     return str(x)
@@ -39,9 +43,11 @@ groq_llm = ChatGroq(
 )
 def call_llm(x):
     try:
-        return gemini_llm.invoke(x)
+        res= gemini_llm.invoke(x)
     except Exception:
-        return groq_llm.invoke(x)
+        res=groq_llm.invoke(x)
+    return res.content
+        
 
 model = RunnableLambda(normalize_input) | RunnableLambda(call_llm)
 #model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
