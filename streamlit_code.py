@@ -13,7 +13,6 @@ st.subheader("Upload documents")
 def build_vectorstore(file_paths):
     return embeddingmodel(file_paths)
 model = RunnableLambda(normalize_input) | RunnableLambda(call_llm)
-#model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
 
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -30,8 +29,6 @@ uploaded_files = st.file_uploader(
     type=["pdf","txt"],
     accept_multiple_files=True
 )
-
-
 
 if uploaded_files:
     st.session_state.file_paths = [] 
