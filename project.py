@@ -37,7 +37,7 @@ gemini_llm = ChatGoogleGenerativeAI(
 )
 
 groq_llm = ChatGroq(
-    model="llama-3.1-70b-versatile",
+    model="llama-3.1-70b",
     temperature=0,
     api_key=st.secrets["GROQ_API_KEY"]
 )
