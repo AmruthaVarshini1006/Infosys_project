@@ -4,6 +4,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import AIMessage, HumanMessage
 from project import load_Documents,embeddingmodel, retriver, normalize_input
 from langchain_core.runnables import RunnableLambda
+from langchain_groq import ChatGroq
 
 
 st.set_page_config(page_title="Chatbot")
@@ -11,7 +12,8 @@ st.title("AI-Powered Document Search & Knowledge Retrieval System")
 st.subheader("Upload documents")
 def build_vectorstore(file_paths):
     return embeddingmodel(file_paths)
-model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
+model = RunnableLambda(normalize_input) | RunnableLambda(call_llm)
+#model = RunnableLambda(normalize_input) |ChatGoogleGenerativeAI(model="models/gemini-2.0-flash", temperature=0)
 
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
